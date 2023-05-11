@@ -1,0 +1,22 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-c55585c1.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/js/app.bundle.js": {
+    "file": "assets/app.bundle-b6e7c2ea.js",
+    "isEntry": true,
+    "src": "resources/js/app.bundle.js"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-6bde1bab.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  },
+  "resources/js/buttons.js": {
+    "file": "assets/buttons-84551962.js",
+    "isEntry": true,
+    "src": "resources/js/buttons.js"
+  }
+}
