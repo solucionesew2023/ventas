@@ -14,4 +14,8 @@ class Categories extends Model
         'slug'
             ];
 
+            public function subcategories(){
+                return $this->hasMany(Subcategy::class);
+            }          
+
 }

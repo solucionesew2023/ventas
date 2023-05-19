@@ -21,7 +21,7 @@ use Filament\Forms\Components\TextInput;
 class CategoriesResource extends Resource
 {
     protected static ?string $model = Categories::class;
-
+    protected static ?string $navigationGroup='Productos';
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     public static function form(Form $form): Form
