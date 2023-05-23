@@ -86,9 +86,6 @@
             form: null,
             isUploadingFile: false,
         }"
-        @unless ($disabled)
-            x-bind:class="{ 'opacity-70 cursor-wait': isUploadingFile }"
-        @endunless
         x-bind:disabled="isUploadingFile"
         x-init="
             form = $el.closest('form')
@@ -101,6 +98,7 @@
                 isUploadingFile = false
             })
         "
+        x-bind:class="{ 'enabled:opacity-70 enabled:cursor-wait': isUploadingFile }"
         {{ $attributes->class($buttonClasses) }}
     >
         @if ($iconPosition === 'before')
