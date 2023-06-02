@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Filament\Resources;
-
 use App\Models\Subcategory;
 use App\Models\Category;
 
@@ -24,14 +22,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 
 
-
-
 class SubcategoryResource extends Resource
 {
     protected static ?string $model = Subcategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
-
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+    protected static ?string $navigationGroup='Productos';
     public static function form(Form $form): Form
     {
         return $form

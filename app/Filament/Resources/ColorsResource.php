@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoriesResource\Pages;
-use App\Filament\Resources\CategoriesResource\RelationManagers;
-use App\Models\Category;
+use App\Filament\Resources\ColorsResource\Pages;
+use App\Filament\Resources\ColorsResource\RelationManagers;
+
+
+use App\Models\Color;
+
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -18,22 +21,24 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\TextInput;
 
-class CategoriesResource extends Resource
-{
-    protected static ?string $model = Category::class;
-    protected static ?string $navigationGroup='Productos';
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
 
+class ColorsResource extends Resource
+{
+    protected static ?string $model = Color::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-sparkles';
+    protected static ?string $navigationGroup='Productos';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Card::make()->schema([
-                    TextInput::make('nombre')->required()
+               
+             Card::make()->schema([
+                TextInput::make('nombre')->required()
                                            ->unique(ignoreRecord:true),
-                    TextInput::make('slug')->required()
-                                           ->unique(ignoreRecord:true)
+                    
                                            ])
+
             ]);
     }
 
@@ -41,10 +46,10 @@ class CategoriesResource extends Resource
     {
         return $table
             ->columns([
+               
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('nombre')->sortable()->searchable(),
-                TextColumn::make('slug')->sortable()->searchable(),
-                
+
             ])
             ->filters([
                 //
@@ -61,7 +66,7 @@ class CategoriesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageCategories::route('/'),
+            'index' => Pages\ManageColors::route('/'),
         ];
     }    
 }
