@@ -10,12 +10,12 @@ class Color extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nombre',
+        'name',
         
             ];
 
             public function products(){
-                
+       //relacion muchos a muchos colores  productos        
                 return $this->belongsToMany(Product::class)->withPivot('cantidad');
                 
             }

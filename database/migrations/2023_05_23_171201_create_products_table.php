@@ -13,16 +13,22 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-
-           
-            $table->text('nombre');
-            $table->text('slug');
-            $table->text('descripcion');
-            
             $table->unsignedBigInteger('subcategory_id');
             $table->foreign('subcategory_id')->references('id')->on('subcategories');
 
+            $table->unsignedBigInteger('tax_id');
+            $table->foreign('tax_id')->references('id')->on('taxes');
 
+            $table->unsignedBigInteger('brand_id');
+            $table->foreign('brand_id')->references('id')->on('brands');
+           
+            $table->text('name');
+            $table->text('slug');
+            $table->text('description');
+            $table->integer('stock_min');
+            $table->integer('stock_current');
+            $table->float('price_buys');
+            $table->float('profit_percentage');
             $table->timestamps();
         });
     }
