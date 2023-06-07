@@ -2,7 +2,7 @@
 namespace App\Filament\Resources;
 use App\Models\Subcategory;
 use App\Models\Category;
-
+use Illuminate\Support\Str;
 use App\Filament\Resources\SubcategoryResource\Pages;
 use App\Filament\Resources\SubcategoryResource\RelationManagers;
 
@@ -30,16 +30,17 @@ class SubcategoryResource extends Resource
     protected static ?string $navigationGroup='Productos';
     public static function form(Form $form): Form
     {
-        return $form
+    return $form
             ->schema([
-               
-               Card::make()->schema([
-                    TextInput::make('nombre')->required()
-                                           ->unique(ignoreRecord:true),
+      Card::make()->schema([
+        TextInput::make('name')->required()
+                               ->unique(ignoreRecord:true)
+                               ->reactive()
+                ->afterStateUpdated(fn ($state, callable $set)=> $set('slug',Str::slug($state))),
                     TextInput::make('slug')->required()
                                            ->unique(ignoreRecord:true),
                     Select::make('category_id')->label('Categoria')
-    ->options(Category::all()->pluck('nombre', 'id'))
+    ->options(Category::all()->pluck('name', 'id'))
     ->searchable()
                                            ])
 
@@ -54,8 +55,8 @@ class SubcategoryResource extends Resource
             ->columns([
               
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('nombre')->sortable()->searchable(),
-                TextColumn::make('category.nombre')->sortable()->searchable(),
+                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('category.name')->sortable()->searchable(),
 
             ])
             ->filters([

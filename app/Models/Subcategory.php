@@ -11,7 +11,7 @@ class Subcategory extends Model
 
     protected $fillable = [
         'id',
-        'nombre',
+        'name',
         'slug',
         'category_id'
             ];

@@ -34,7 +34,7 @@ class ColorsResource extends Resource
             ->schema([
                
              Card::make()->schema([
-                TextInput::make('nombre')->required()
+                TextInput::make('name')->required()
                                            ->unique(ignoreRecord:true),
                     
                                            ])
@@ -48,7 +48,7 @@ class ColorsResource extends Resource
             ->columns([
                
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('nombre')->sortable()->searchable(),
+                TextColumn::make('name')->sortable()->searchable(),
 
             ])
             ->filters([

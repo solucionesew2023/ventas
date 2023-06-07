@@ -41,7 +41,7 @@ class ProductResource extends Resource
         return $form
             ->schema([
 
-       TextInput::make('nombre')->required()
+       TextInput::make('name')->required()
                 ->unique(ignoreRecord:true)
                 ->reactive()
                 ->afterStateUpdated(fn ($state, callable $set)=> $set('slug',Str::slug($state))),
@@ -51,14 +51,14 @@ class ProductResource extends Resource
 
                  Card::make()
                  ->schema([
-                    RichEditor::make('descripcion')->required(),
+                    RichEditor::make('description')->required(),
                  ])->columns(1),
 
        
                
        Select::make('category_id')
                     ->label('Categoria')
-                    ->options(Category::all()->pluck(value:'nombre', key:'id')->toArray())
+                    ->options(Category::all()->pluck(value:'name', key:'id')->toArray())
                     ->reactive()
                     ->afterStateUpdated(fn(callable $set) => $set('subcategory_id', null)),
 
@@ -69,16 +69,16 @@ class ProductResource extends Resource
                         $category = Category::find( $get('category_id'));
 
                         if(! $category){
-                            return Subcategory::all()->pluck( value: 'nombre', key: 'id');
+                            return Subcategory::all()->pluck( value: 'name', key: 'id');
                         }
                         return $category->subcategories->pluck('nombre', 'id');
 
                     }),
 
         Select::make('color_id')->label('Color')
-                    ->options(Color::all()->pluck('nombre', 'id'))
+                    ->options(Color::all()->pluck('name', 'id'))
                     ->searchable(),
-        TextInput::make('cantidad')->required()
+        TextInput::make('quantity')->required()
                                            ->Numeric(),
 
         FileUpload::make('image')->image()->multiple(),
@@ -93,9 +93,9 @@ class ProductResource extends Resource
             ->columns([
                 
                 TextColumn::make('id')->sortable(),
-                TextColumn::make('nombre')->sortable()->searchable(),
-                TextColumn::make('subcategory.nombre')->sortable()->searchable(),
-                TextColumn::make('subcategory.category.nombre')->sortable()->searchable(),
+                TextColumn::make('name')->sortable()->searchable(),
+                TextColumn::make('subcategory.name')->sortable()->searchable(),
+                TextColumn::make('subcategory.category.name')->sortable()->searchable(),
                 TextColumn::make('products.withPivot.cantidad')->sortable()->searchable(),
                
 

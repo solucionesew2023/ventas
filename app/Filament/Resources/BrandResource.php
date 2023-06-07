@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Filament\Resources;
-use Illuminate\Support\Str;
-use App\Filament\Resources\CategoriesResource\Pages;
-use App\Filament\Resources\CategoriesResource\RelationManagers;
-use App\Models\Category;
+
+use App\Filament\Resources\BrandResource\Pages;
+use App\Filament\Resources\BrandResource\RelationManagers;
+use App\Models\Brand;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -11,30 +12,24 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
-use Filament\Tables\Columns\TextColumn;
-
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\TextInput;
-
-class CategoriesResource extends Resource
+use Filament\Tables\Columns\TextColumn;
+class BrandResource extends Resource
 {
-    protected static ?string $model = Category::class;
-    protected static ?string $navigationGroup='Productos';
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $model = Brand::class;
 
+    protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
+    protected static ?string $navigationGroup='Productos';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Card::make()->schema([
                     TextInput::make('name')->required()
-                                           ->unique(ignoreRecord:true)
-                                           ->reactive()
-                ->afterStateUpdated(fn ($state, callable $set)=> $set('slug',Str::slug($state))),
-                    TextInput::make('slug')->required()
-                                           ->unique(ignoreRecord:true)
-                                           ])
+                                               ->unique(ignoreRecord:true),
+                        
+                                               ])
             ]);
     }
 
@@ -44,8 +39,6 @@ class CategoriesResource extends Resource
             ->columns([
                 TextColumn::make('id')->sortable(),
                 TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('slug')->sortable()->searchable(),
-                
             ])
             ->filters([
                 //
@@ -62,7 +55,7 @@ class CategoriesResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageCategories::route('/'),
+            'index' => Pages\ManageBrands::route('/'),
         ];
     }    
 }
