@@ -14,6 +14,9 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Subcategory;
 use App\Models\Color;
+use App\Models\Size;
+use App\Models\Tax;
+use App\Models\Brand;
 
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -27,7 +30,7 @@ use Filament\Forms\Components\Card;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
-
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 
 class ProductResource extends Resource
@@ -47,9 +50,20 @@ class ProductResource extends Resource
                 ->afterStateUpdated(fn ($state, callable $set)=> $set('slug',Str::slug($state))),
        TextInput::make('slug')->required()
                  ->unique(ignoreRecord:true),
-
-
-                 Card::make()
+       Select::make('tax_id')
+                 ->label('Taxes')
+                 ->required()
+                 ->options(Tax::all()->pluck(value:'name', key:'id')->toArray()),
+       Select::make('brand_id')
+                 ->label('Brands')
+                 ->required()
+                 ->options(Brand::all()->pluck(value:'name', key:'id')->toArray()),
+        TextInput::make('price_buys')->required()
+                 ->Numeric(),
+        TextInput::make('profit_percentage')->required()
+                 ->Numeric(),
+    
+       Card::make()
                  ->schema([
                     RichEditor::make('description')->required(),
                  ])->columns(1),
@@ -57,27 +71,70 @@ class ProductResource extends Resource
        
                
        Select::make('category_id')
-                    ->label('Categoria')
+                    ->label('Category')
+                    ->required()
                     ->options(Category::all()->pluck(value:'name', key:'id')->toArray())
                     ->reactive()
                     ->afterStateUpdated(fn(callable $set) => $set('subcategory_id', null)),
 
        Select::make( name: 'subcategory_id' )
-                    ->label(label: 'SubCategoria')
+                    ->label(label: 'SubCategory')
+                    ->required()
                     ->options( function ( callable $get ) {
                         
                         $category = Category::find( $get('category_id'));
 
-                        if(! $category){
-                            return Subcategory::all()->pluck( value: 'name', key: 'id');
+                        if($category){
+                            return $category->subcategories->pluck('name', 'id');
                         }
-                        return $category->subcategories->pluck('nombre', 'id');
+                       
 
                     }),
 
-        Select::make('color_id')->label('Color')
-                    ->options(Color::all()->pluck('name', 'id'))
-                    ->searchable(),
+       Radio::make( name: 'tienecolor')
+                    ->label(label: '¿The product has color?')
+                    ->options([
+                        'yes' => 'Yes',
+                        'no' => 'No',])
+                    ->reactive()
+                    ->afterStateUpdated(fn(callable $set) => $set('color_id', null))
+                    ->required()
+                    ->inline(),
+   
+       Select::make( name: 'color_id' )
+                    ->label(label: 'Colores')
+                    ->options( function ( callable $get ) {
+                        
+                       if($get('tienecolor')=='yes'){
+                            return Color::all()->pluck( value: 'name', key: 'id');
+                        }
+                      
+
+
+                    }),
+       Radio::make( name: 'tienetalla')
+                    ->label(label: '¿The product has size?')
+                    ->options([
+                        'yes' => 'Yes',
+                        'no' => 'No',])
+                    ->reactive()
+                    ->afterStateUpdated(fn(callable $set) => $set('size_id', null))
+                    ->required()
+                    ->inline(),
+   
+    Select::make( name: 'size_id' )
+                    ->label(label: 'Tallas')
+                    ->options( function ( callable $get ) {
+                        
+                       if($get('tienetalla')=='yes'){
+                            return Size::all()->pluck( value: 'name', key: 'id');
+                        }
+                      
+
+
+                    }),
+ 
+    
         TextInput::make('quantity')->required()
                                            ->Numeric(),
 
