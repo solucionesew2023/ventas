@@ -43,25 +43,52 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('category_id')
+                ->label('Category')
+                ->options(Category::all()->pluck(value:'name', key:'id')->toArray())
+                ->reactive()
+                ->afterStateUpdated(fn(callable $set) => $set('subcategory_id', null)),
 
+   Select::make( name: 'subcategory_id' )
+                ->label(label: 'SubCategory')
+                ->required()
+                ->options( function ( callable $get ) {
+                    
+                    $category = Category::find( $get('category_id'));
+
+                    if($category){
+                        return $category->subcategories->pluck('name', 'id');
+                    }
+                    return Subcategory::all()->pluck('name','id');
+                   
+
+                }),
+
+
+   
        TextInput::make('name')->required()
                 ->unique(ignoreRecord:true)
                 ->reactive()
                 ->afterStateUpdated(fn ($state, callable $set)=> $set('slug',Str::slug($state))),
        TextInput::make('slug')->required()
                  ->unique(ignoreRecord:true),
-       Select::make('tax_id')
-                 ->label('Taxes')
-                 ->required()
-                 ->options(Tax::all()->pluck(value:'name', key:'id')->toArray()),
        Select::make('brand_id')
                  ->label('Brands')
                  ->required()
                  ->options(Brand::all()->pluck(value:'name', key:'id')->toArray()),
-        TextInput::make('price_buys')->required()
+       Select::make('tax_id')
+                 ->label('Taxes')
+                 ->required()
+                 ->options(Tax::all()->pluck(value:'name', key:'id')->toArray()),
+       
+       TextInput::make('price_buys')->required()
                  ->Numeric(),
         TextInput::make('profit_percentage')->required()
                  ->Numeric(),
+        TextInput::make('stock_min')->required()
+                 ->Numeric(), 
+        TextInput::make('stock_current')->required()
+                 ->Numeric(),    
     
        Card::make()
                  ->schema([
@@ -70,76 +97,8 @@ class ProductResource extends Resource
 
        
                
-       Select::make('category_id')
-                    ->label('Category')
-                    ->required()
-                    ->options(Category::all()->pluck(value:'name', key:'id')->toArray())
-                    ->reactive()
-                    ->afterStateUpdated(fn(callable $set) => $set('subcategory_id', null)),
+        
 
-       Select::make( name: 'subcategory_id' )
-                    ->label(label: 'SubCategory')
-                    ->required()
-                    ->options( function ( callable $get ) {
-                        
-                        $category = Category::find( $get('category_id'));
-
-                        if($category){
-                            return $category->subcategories->pluck('name', 'id');
-                        }
-                       
-
-                    }),
-
-       Radio::make( name: 'tienecolor')
-                    ->label(label: '¿The product has color?')
-                    ->options([
-                        'yes' => 'Yes',
-                        'no' => 'No',])
-                    ->reactive()
-                    ->afterStateUpdated(fn(callable $set) => $set('color_id', null))
-                    ->required()
-                    ->inline(),
-   
-       Select::make( name: 'color_id' )
-                    ->label(label: 'Colores')
-                    ->options( function ( callable $get ) {
-                        
-                       if($get('tienecolor')=='yes'){
-                            return Color::all()->pluck( value: 'name', key: 'id');
-                        }
-                      
-
-
-                    }),
-       Radio::make( name: 'tienetalla')
-                    ->label(label: '¿The product has size?')
-                    ->options([
-                        'yes' => 'Yes',
-                        'no' => 'No',])
-                    ->reactive()
-                    ->afterStateUpdated(fn(callable $set) => $set('size_id', null))
-                    ->required()
-                    ->inline(),
-   
-    Select::make( name: 'size_id' )
-                    ->label(label: 'Tallas')
-                    ->options( function ( callable $get ) {
-                        
-                       if($get('tienetalla')=='yes'){
-                            return Size::all()->pluck( value: 'name', key: 'id');
-                        }
-                      
-
-
-                    }),
- 
-    
-        TextInput::make('quantity')->required()
-                                           ->Numeric(),
-
-        FileUpload::make('image')->image()->multiple(),
-                    
    
             ]);
     }
@@ -153,9 +112,12 @@ class ProductResource extends Resource
                 TextColumn::make('name')->sortable()->searchable(),
                 TextColumn::make('subcategory.name')->sortable()->searchable(),
                 TextColumn::make('subcategory.category.name')->sortable()->searchable(),
-                TextColumn::make('products.withPivot.cantidad')->sortable()->searchable(),
-               
-
+                TextColumn::make('brand.name')->sortable()->searchable(),
+                TextColumn::make('tax.name')->sortable()->searchable(),
+                TextColumn::make('price_buys')->sortable()->searchable(),
+                TextColumn::make('profit_percentage')->sortable()->searchable(),
+                TextColumn::make('stock_min')->sortable()->searchable(),
+                TextColumn::make('stock_current')->sortable()->searchable(),
             ])
             ->filters([
                 //

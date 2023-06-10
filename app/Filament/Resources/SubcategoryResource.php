@@ -37,9 +37,9 @@ class SubcategoryResource extends Resource
                                ->unique(ignoreRecord:true)
                                ->reactive()
                 ->afterStateUpdated(fn ($state, callable $set)=> $set('slug',Str::slug($state))),
-                    TextInput::make('slug')->required()
-                                           ->unique(ignoreRecord:true),
-                    Select::make('category_id')->label('Categoria')
+        TextInput::make('slug')->required()
+                               ->unique(ignoreRecord:true),
+        Select::make('category_id')->label('Categoria')
     ->options(Category::all()->pluck('name', 'id'))
     ->searchable()
                                            ])
