@@ -26,9 +26,7 @@ return new class extends Migration
             $table->text('slug');
             $table->text('description');
             $table->integer('stock_min');
-            $table->integer('stock_current');
-            $table->float('price_buys');
-            $table->float('profit_percentage');
+            $table->text('status');
             $table->timestamps();
         });
     }

@@ -17,9 +17,7 @@ class Product extends Model
         'slug',
         'description',
         'stock_min',
-        'stock_current',
-        'price_buys',
-        'profit_percentage'             
+        'status'             
             ];
 
     public function subcategory(){
@@ -48,11 +46,25 @@ class Product extends Model
         return $this->belongsToMany(Size::class,'color_product_size','product_id','color_id','size_id')->withPivot('quantity');
         
     }
+    public function providers(){
+        //relacion muchos a muchos productos proveedores
+        return $this->belongsToMany(Provider::class)->withPivot(
+                                                        'quantity',
+                                                        'purchase_price',
+                                                        'subtotal',
+                                                        'color',
+                                                        'size');
+        
+    }
+
 
     //Relacion uno a muchos entre productos e imagenes
   public function images(){
     return $this->hasMany(Image::class);
 }
-
+public function productQuantity(): HasOne
+    {
+        return $this->hasOne(ProductQuantity::class);
+    }
    
 }

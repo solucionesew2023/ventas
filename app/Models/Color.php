@@ -16,7 +16,7 @@ class Color extends Model
 
             public function products(){
        //relacion muchos a muchos colores  productos        
-                return $this->belongsToMany(Product::class)->withPivot('cantidad');
+                return $this->belongsToMany(Product::class)->withPivot('cantidad','purchase_price','profit_percentage');
                 
             }
 }

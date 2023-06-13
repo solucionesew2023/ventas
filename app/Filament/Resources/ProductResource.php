@@ -63,9 +63,6 @@ class ProductResource extends Resource
                    
 
                 }),
-
-
-   
        TextInput::make('name')->required()
                 ->unique(ignoreRecord:true)
                 ->reactive()
@@ -80,27 +77,22 @@ class ProductResource extends Resource
                  ->label('Taxes')
                  ->required()
                  ->options(Tax::all()->pluck(value:'name', key:'id')->toArray()),
-       
-       TextInput::make('price_buys')->required()
-                 ->Numeric(),
-        TextInput::make('profit_percentage')->required()
-                 ->Numeric(),
-        TextInput::make('stock_min')->required()
+       TextInput::make('stock_min')->required()
                  ->Numeric(), 
-        TextInput::make('stock_current')->required()
-                 ->Numeric(),    
-    
+       Select::make('status')->required()
+                 ->options([
+                     'draft' => 'Draft',
+                     'published' => 'Published',
+                 ]),
        Card::make()
                  ->schema([
                     RichEditor::make('description')->required(),
                  ])->columns(1),
-
-       
-               
-        
-
-   
-            ]);
+        FileUpload::make('image')->image()
+                                ->multiple()
+                                ->imageResizeTargetWidth('1920')
+                                ->imageResizeTargetHeight('1080'),
+           ]);
     }
 
     public static function table(Table $table): Table
@@ -114,11 +106,11 @@ class ProductResource extends Resource
                 TextColumn::make('subcategory.category.name')->sortable()->searchable(),
                 TextColumn::make('brand.name')->sortable()->searchable(),
                 TextColumn::make('tax.name')->sortable()->searchable(),
-                TextColumn::make('price_buys')->sortable()->searchable(),
-                TextColumn::make('profit_percentage')->sortable()->searchable(),
+                
                 TextColumn::make('stock_min')->sortable()->searchable(),
-                TextColumn::make('stock_current')->sortable()->searchable(),
-            ])
+               
+                TextColumn::make('status')->sortable()->searchable(),
+                ])
             ->filters([
                 //
             ])
