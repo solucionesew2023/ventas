@@ -37,25 +37,23 @@ class Product extends Model
 
     public function colors(){
         //relacion muchos a muchos productos colores
-        return $this->belongsToMany(Color::class)->withPivot('quantity');
-        
+        return $this->belongsToMany(Color::class)->withPivot('quantity','purchase_price','profit_percentage');
     }
 
     public function sizes(){
         //relacion muchos a muchos productos colores tallas
-        return $this->belongsToMany(Size::class,'color_product_size','product_id','color_id','size_id')->withPivot('quantity');
+        return $this->belongsToMany(Size::class)->withPivot('quantity','purchase_price','profit_percentage');
         
     }
-    public function providers(){
-        //relacion muchos a muchos productos proveedores
-        return $this->belongsToMany(Provider::class)->withPivot(
+    public function shopping(){
+        //relacion muchos a muchos productos compras
+        return $this->belongsToMany(Shopping::class)->withPivot(
                                                         'quantity',
                                                         'purchase_price',
                                                         'subtotal',
                                                         'color',
                                                         'size');
-        
-    }
+      }
 
 
     //Relacion uno a muchos entre productos e imagenes

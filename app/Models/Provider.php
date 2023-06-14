@@ -18,18 +18,12 @@ class Provider extends Model
         'address',
         'name_contact',
     ];
+//Relacion uno a muchos con shopping
+    public function shopping(){
 
-    public function products(){
-        //relacion muchos a muchos productos proveedores
-        return $this->belongsToMany(Product::class)->withPivot(
-                                                        'quantity',
-                                                        'purchase_price',
-                                                        'subtotal',
-                                                        'color',
-                                                        'size');
-        
+        return $this->hasMany(Shopping::class);
     }
-
+    //relacion inversa con ciudades
     public function city(){
         return $this->belongsTo(City::class);
     }
