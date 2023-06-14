@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             
             $table->unsignedBigInteger('shopping_id');
-            $table->foreign('shopping_id')->references('id')->on('shopping');
+            $table->foreign('shopping_id')->references('id')->on('shoppings');
             $table->float('purchase_price');
             $table->integer('quantity');
             $table->float('subtotal');
