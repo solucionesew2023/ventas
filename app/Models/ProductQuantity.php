@@ -9,12 +9,12 @@ class ProductQuantity extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
+    protected $fillable = [
         'product_id',
         'quantity',
         'purchase_price',
         'profit_percentage'
-    ]
+    ];
 
     public function product(): HasOne
     {

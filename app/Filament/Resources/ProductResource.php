@@ -1,13 +1,24 @@
 <?php
 
 namespace App\Filament\Resources;
+use Filament\Tables\Filters\SelectFilter;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+
+
+
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+
+
+
+
 
 use App\Filament\Resources\ProductResource\Pages;
 
 use Illuminate\Support\Str;
 
 use App\Filament\Resources\collable;
-
+use Filament\Tables\Filters\TernaryFilter;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 
@@ -32,6 +43,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+
 
 class ProductResource extends Resource
 {
@@ -60,9 +72,7 @@ class ProductResource extends Resource
                         return $category->subcategories->pluck('name', 'id');
                     }
                     return Subcategory::all()->pluck('name','id');
-                   
-
-                }),
+                     }),
        TextInput::make('name')->required()
                 ->unique(ignoreRecord:true)
                 ->reactive()
@@ -112,14 +122,24 @@ class ProductResource extends Resource
                 TextColumn::make('status')->sortable()->searchable(),
                 ])
             ->filters([
-                //
+                
+SelectFilter::make('subcategory')->relationship('subcategory', 'name'),
+
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                ExportAction::make()
+                
+                
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+
+            ExportBulkAction::make()
+    
+             
             ]);
     }
     
@@ -128,5 +148,7 @@ class ProductResource extends Resource
         return [
             'index' => Pages\ManageProducts::route('/'),
         ];
-    }    
+    } 
+    
+    
 }
